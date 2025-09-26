@@ -21,7 +21,7 @@ def main():
     copy_everything_to_target(target_directory)
     
     print("Generating pages...")
-    generate_pages_recursive("content", "template.html", target_directory)
+    generate_pages_recursive("content", "template.html", target_directory, basepath)
 
     print("Site generation complete.")
 
@@ -62,7 +62,7 @@ def copy_folder_recursively(src, dest):
     except Exception as e:
         print(f'Failed to copy from {src} to {dest}. Reason: {e}')
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, site_root):
     #find every file in dir_path_content
     print(f"Current working directory: {os.getcwd()}")
     print(f"Generating pages from content directory {dir_path_content} using template {template_path} into destination directory {dest_dir_path}")
@@ -79,7 +79,7 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
                 if not os.path.exists(dest_dir):
                     os.makedirs(dest_dir)
                 print(f"Generating page: {content_path} -> {dest_path}")
-                generate_page(content_path, template_path, dest_path, dest_dir_path)
+                generate_page(content_path, template_path, dest_path, dest_dir_path, site_root)
 
 if __name__ == "__main__":
     main()
