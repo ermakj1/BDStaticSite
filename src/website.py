@@ -47,14 +47,14 @@ def generate_page(from_path, template_path, dest_path):
     #replace {{ Title }} and {{ Content }} in template with title and html_content
     title_to_replace = "{{ Title }}"
     content_to_replace = "{{ Content }}"
-    if title_to_replace not in template or content_to_replace not in template:
-        print(f"Template {template_path} is missing {{ Title }} or {{ Content }} placeholders")
-        return
-    else :
-        print(f"Template {template_path} contains both {title_to_replace} and {content_to_replace} placeholders")
-    
     template = template.replace(title_to_replace, title)
     template = template.replace(content_to_replace, html_content)
+
+    #replace href="/ with href="{from_path}/"
+    template = re.sub(r'href="/', f'href="{from_path}/', template)
+    #replace src="/ with src="{from_path}/"
+    template = re.sub(r'src="/', f'src="{from_path}/', template)
+    
 
     #if directories in dest_path do not exist, create them
     dest_dir = os.path.dirname(dest_path)

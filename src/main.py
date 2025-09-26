@@ -1,21 +1,27 @@
 import os
 import shutil
+import sys
 from textnode import *
 from website import generate_page
 
 
 
 def main():
+    basepath  = sys.argv[1] if len(sys.argv) > 1 else "/"   
+    print("Base path: " + basepath)
+
+    target_directory = "docs"
+
     print("Starting site generation...")
-    # clear out public directory
-    print("Clearing out public directory...")
-    delete_everything_in_public()
-    # copy static files to public
-    print("Copying static files to public directory...")
-    copy_everything_to_public()
+    # clear out target directory
+    print(f"Clearing out {target_directory} directory...")
+    delete_everything_in_target(target_directory)
+    # copy static files to target directory
+    print("Copying static files to target directory...")
+    copy_everything_to_target(target_directory)
     # generate pages
     print("Generating pages...")
-    generate_pages_recursive("content", "template.html", "public")
+    generate_pages_recursive(basepath, "template.html", target_directory)
     print("Site generation complete.")
 
 
@@ -24,11 +30,14 @@ def main():
 # file operations helpers
 #
 
-def delete_everything_in_public():
-    # Deletes everything in the public directory
-    directory = "public"
-    for filename in os.listdir(directory):
-        file_path = os.path.join(directory, filename)
+def delete_everything_in_target(target_directory):
+    # Deletes everything in the target directory
+    if not os.path.exists(target_directory):
+        print(f"Target directory {target_directory} does not exist, nothing to clean")
+        return
+
+    for filename in os.listdir(target_directory):
+        file_path = os.path.join(target_directory, filename)
         try:
             if os.path.isfile(file_path) or os.path.islink(file_path):
                 os.unlink(file_path)
@@ -37,8 +46,8 @@ def delete_everything_in_public():
         except Exception as e:
             print(f'Failed to delete {file_path}. Reason: {e}')
 
-def copy_everything_to_public():
-    copy_folder_recursively("static", "public")
+def copy_everything_to_target(target_directory):
+    copy_folder_recursively("static", target_directory)
 
 def copy_folder_recursively(src, dest):
     try:
