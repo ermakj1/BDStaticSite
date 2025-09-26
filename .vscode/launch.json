@@ -5,7 +5,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
-            "args": ["content",],
+            "args": ["BDStaticSite",],
         }
     ]
 }
